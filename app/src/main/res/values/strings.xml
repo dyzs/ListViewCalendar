@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ListViewCalendar</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="go_to_list_view_calendar">goto list view calendar</string>
+</resources>
