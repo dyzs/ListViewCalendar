@@ -147,7 +147,7 @@ public class CalListViewLunarView extends LinearLayout{
         /**
          * Invoked when date picked.
          *
-         * @param view     {@link LunarView}
+         * @param view     {@link }
          * @param monthDay {@link MonthDay}
          */
         void onDatePick(CalListViewLunarView view, MonthDay monthDay);
@@ -312,7 +312,7 @@ public class CalListViewLunarView extends LinearLayout{
 
     /**
      * 分发选中日期的监听事件，
-     * Dispatch date pick listener. This will be invoked be {@link MonthView}
+     * Dispatch date pick listener. This will be invoked be {@link }
      *
      * @param monthDay month day
      */

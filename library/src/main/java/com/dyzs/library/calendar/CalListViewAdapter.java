@@ -60,26 +60,10 @@ public class CalListViewAdapter extends BaseAdapter {
         mLunarView = lunarView;
 //        mMinMonth = new CalListViewMonth(1900, 0, 1);
 //        mMaxMonth = new CalListViewMonth(2100, 11, 1);
-
         mMinMonth = new CalListViewMonth(2015, 0, 1);
         mMaxMonth = new CalListViewMonth(2100, 11, 1);
         calculateRange(mMinMonth, mMaxMonth);
         System.out.println("getIndexOfCurrentMonth:" + getIndexOfCurrentMonth());
-    }
-
-    @Deprecated
-    public ArrayList<CalListViewMonth> getStringArrMonth(int currMonthPosition) {
-        ArrayList<CalListViewMonth> arrays = new ArrayList<>();
-        CalListViewMonth month;
-        month = getItemMonth(currMonthPosition - 1);
-        arrays.add(month);
-        month = getItemMonth(currMonthPosition);
-        arrays.add(month);
-        month = getItemMonth(currMonthPosition + 1);
-        arrays.add(month);
-        month = getItemMonth(currMonthPosition + 2);
-        arrays.add(month);
-        return arrays;
     }
 
     public CalListViewMonth getCalendarListMonth (int pos) {
@@ -104,27 +88,30 @@ public class CalListViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolderMonthView holder = null;
-        CalListViewMonthView monthView = null;
+//        CalListViewMonthView monthView = null;
         if (convertView == null) {
             convertView = View.inflate(mContext, R.layout.item_view_calendar, null);
         }
         holder = ViewHolderMonthView.getHolder(convertView);
         CalListViewMonth month = getItemMonth(position);
         holder.tv_date.setText(month.getYear() + "年" + (month.getMonth() + 1) + "月");
-        monthView = new CalListViewMonthView(
-                mContext,
-                month,
-                mLunarView);
-//        monthView.setSelectedDay(0);
+        holder.lcvmv.setMonth(month);
+        holder.lcvmv.setSelectedDay(0);
+
+
+
+//        monthView = new CalListViewMonthView(mContext);
+//        monthView.setMonth(month);
+////        monthView.setSelectedDay(0);
         if (markers != null) {
             if (markers.containsKey(position)) {
-                monthView.setMarkerData(markers.get(position));
-                monthView.invalidate();
+                holder.lcvmv.setMarkerData(markers.get(position));
+                holder.lcvmv.invalidate();
             }
         }
 
 
-        monthView.setOnMonthViewClickListener(new CalListViewMonthView.MonthViewClickListener() {
+        holder.lcvmv.setOnMonthViewClickListener(new CalListViewMonthView.MonthViewClickListener() {
             @Override
             public void onDayClick(View view, MonthDay monthDay) {
                 Calendar calendar = monthDay.getCalendar();
@@ -161,8 +148,8 @@ public class CalListViewAdapter extends BaseAdapter {
         });
 
 
-        holder.ll_item.removeAllViews();
-        holder.ll_item.addView(monthView);
+//        holder.ll_item.removeAllViews();
+//        holder.ll_item.addView(monthView);
 
 
 //        CalListViewMonthView monthView = new CalListViewMonthView(mContext, (CalListViewMonth) getItem(position), mLunarView);
@@ -259,9 +246,11 @@ public class CalListViewAdapter extends BaseAdapter {
     static class ViewHolderMonthView{
         private LinearLayout ll_item;
         private TextView tv_date;
+        private CalListViewMonthView lcvmv;
         public ViewHolderMonthView(View convertView) {
             ll_item = (LinearLayout) convertView.findViewById(R.id.ll_item);
             tv_date = (TextView) convertView.findViewById(R.id.tv_date);
+            lcvmv = (CalListViewMonthView) convertView.findViewById(R.id.lcvmv);
         }
         public static ViewHolderMonthView getHolder(View convertView) {
             ViewHolderMonthView holder = (ViewHolderMonthView) convertView.getTag();

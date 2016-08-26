@@ -13,4 +13,23 @@
         <attr name="shouldPickOnMonthChange" format="boolean"/>
     </declare-styleable>
 
+
+
+    <declare-styleable name="CalListView">
+        <attr name="clv_solarTextSize" format="dimension" />
+        <attr name="clv_lunarTextSize" format="dimension" />
+
+        <attr name="clv_todayBackground" format="reference"/>
+        <attr name="clv_solarTextColor" format="color" />
+        <attr name="clv_lunarTextColor" format="color" />
+        <attr name="clv_highLightColor" format="color"/>
+        <attr name="clv_uncheckableColor" format="color" />
+        <attr name="clv_backgroundColor" format="color" />
+    </declare-styleable>
+
+    <!--
+        wait to set a lunar toggle
+        wait to set a first day of month toggle
+        wait to set init month      references format : string {"2016-10-25"}
+    -->
 </resources>

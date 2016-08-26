@@ -163,39 +163,6 @@ public class CalendarActivity extends Activity {
         public boolean handleMessage(Message msg) {
             ArrayList<CalendarInfo> calendarInfoList;
             switch (msg.what) {
-                // 这种查询方法作废
-                case 1: // 发送加载 marker 数据请求
-                    calendarInfoList = (ArrayList<CalendarInfo>) msg.obj;
-                    if (calendarInfoList != null) {
-                        mFinalData.clear();
-                        ArrayList<CalListViewMonth> listMonths = adapter.getStringArrMonth(mCurrentMonthPosition);
-                        String strMonth = "";
-                        String strDate = "";
-                        for (int i = 0; i < listMonths.size() ; i++) {
-                            strMonth = (listMonths.get(i).getMonth() + 1) + "";
-                            if (strMonth.length() == 1) {
-                                strMonth = "0" + strMonth;
-                            }
-                            strDate = listMonths.get(i).getYear() + "-" + strMonth;
-                            mHmMarker = null;
-                            mHmMarker = new HashMap<>();
-                            for (CalendarInfo cInfo : calendarInfoList) {
-                                if (cInfo.date.contains(strDate)) {
-                                    // 把当前月份的 marker 加入到 hashMap 中
-                                    mHmMarker.put(cInfo.date, getStarType(cInfo.dataTypeInfoList.size()));
-                                }
-                                System.out.println("data:" + cInfo.date + "/size:" + cInfo.dataTypeInfoList.size());
-                            }
-
-                            // 通过当前日期再计算出 pos
-                            int itemPosition = adapter.getIndexOfMonth(listMonths.get(i).getYear(), (listMonths.get(i).getMonth()));
-                            mFinalData.put(itemPosition, mHmMarker);
-                        }
-                        msg = mHandler.obtainMessage();
-                        msg.what = REFRESH_MARKER;
-                        mHandler.sendMessage(msg);
-                    }
-                    break;
                 case REFRESH_MARKER:
                     adapter.setAdapterMarkers(mFinalData);
                     break;
@@ -278,6 +245,12 @@ public class CalendarActivity extends Activity {
             calendarInfoList.add(info);
         }
         for (int i = 10; i < 15; i ++) {
+            info = new CalendarInfo();
+            info.markCount = i + 1;
+            info.date = "2016-08-" + i;
+            calendarInfoList.add(info);
+        }
+        for (int i = 25; i < 31; i ++) {
             info = new CalendarInfo();
             info.markCount = i + 1;
             info.date = "2016-08-" + i;
