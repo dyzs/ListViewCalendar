@@ -29,6 +29,8 @@ import java.util.HashMap;
 public class CalendarActivity extends Activity {
     private static final String TAG = CalendarActivity.class.getSimpleName();
     private static final int ON_DATE_SELECTED = 8;
+    private static final int REFRESH_MARKER = 2;
+    private static final int DATE_REQUEST_SUCCESS = 3;
 
 
     private Context mContext;
@@ -190,14 +192,14 @@ public class CalendarActivity extends Activity {
                             mFinalData.put(itemPosition, mHmMarker);
                         }
                         msg = mHandler.obtainMessage();
-                        msg.what = 2;
+                        msg.what = REFRESH_MARKER;
                         mHandler.sendMessage(msg);
                     }
                     break;
-                case 2:
+                case REFRESH_MARKER:
                     adapter.setAdapterMarkers(mFinalData);
                     break;
-                case 3:         // 新查询数据方法
+                case DATE_REQUEST_SUCCESS:         // 新查询数据方法
                     calendarInfoList = (ArrayList<CalendarInfo>) msg.obj;
                     if (calendarInfoList != null) {
                         Collections.sort(calendarInfoList);
@@ -233,7 +235,7 @@ public class CalendarActivity extends Activity {
                         }
                         mFinalData = tempData;
                         msg = mHandler.obtainMessage();
-                        msg.what = 2;
+                        msg.what = REFRESH_MARKER;
                         mHandler.sendMessage(msg);
                     }
                     break;
@@ -269,14 +271,20 @@ public class CalendarActivity extends Activity {
 //        );
         ArrayList<CalendarInfo> calendarInfoList = new ArrayList<>();
         CalendarInfo info = null;
-        for (int i = 0; i < 50; i ++) {
+        for (int i = 10; i < 28; i ++) {
             info = new CalendarInfo();
             info.markCount = i + 1;
-            info.date = "2016-06-08";
+            info.date = "2016-06-" + i;
+            calendarInfoList.add(info);
+        }
+        for (int i = 10; i < 15; i ++) {
+            info = new CalendarInfo();
+            info.markCount = i + 1;
+            info.date = "2016-08-" + i;
             calendarInfoList.add(info);
         }
         Message msg = mHandler.obtainMessage();
-        msg.what = 1;
+        msg.what = DATE_REQUEST_SUCCESS;
         msg.obj = calendarInfoList;
         mHandler.sendMessage(msg);
     }
