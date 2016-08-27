@@ -58,9 +58,11 @@ public class CalListViewMonthView extends View {
 	private int mLunarTextColor = res.getColor(R.color.calendar_normal_lunar_text_color);
 	// 仅周六日日期字体颜色
 	private int mHighLightColor = res.getColor(R.color.calendar_weekends_solar_color);
-	private int mUncheckableColor = 0xffb0b0b0;			// 特殊节假日字体颜色，上月下月的字体颜色
+	private int mUncheckableColor = 0x00b0b0b0;			// 特殊节假日字体颜色，上月下月的字体颜色
 	private int mBackgroundColor = Color.WHITE;	//0xfffafafa;		// 日期面板背景颜色
 	private Drawable mTodayBackground;
+	public int mMarkerBackgroundColor = res.getColor(R.color.calendar_today_bg_color);
+
 	// -------------------
 
 
@@ -72,7 +74,6 @@ public class CalListViewMonthView extends View {
 	private static final int CLICK_COLOR = 0xffbac5cf; // add maidou
 
 	private CalListViewMonth mMonth = new CalListViewMonth(2016, 10, 25);
-	private CalListViewLunarView mLunarView;
 
 	private final Region[][] mMonthWithFourWeeks = new Region[4][DAYS_IN_WEEK];		// 在平面上的一个区域，是用 Rect 组成的
 	private final Region[][] mMonthWithFiveWeeks = new Region[5][DAYS_IN_WEEK];
@@ -120,7 +121,7 @@ public class CalListViewMonthView extends View {
 		int dayHeightInFiveWeek = (int) (h / 5f);
 		int dayHeightInSixWeek = (int) (h / 6f);
 
-		mCircleRadius = dayWidth / 3.0f;
+		mCircleRadius = dayWidth / 3.5f;
 		mCircleMarkerRadius = dayWidth / 15.0f;
 
 		mSolarTextSize = mContext.getResources().getDimension(R.dimen.calendar_solar_text_size);// h / 15f;
@@ -186,12 +187,11 @@ public class CalListViewMonthView extends View {
 	private boolean flagInit = true;
 	private boolean flagMarkerDay = false;
 	private void drawMarker (Canvas canvas, Region[][] regions, int i, int j) {
-		// String cycleTime = transformMonthDayToString(mMonth.getMonthDay(i, j))
 		if (mMarkerData != null) {
 			String date = transformMonthDayToString(mMonth.getMonthDay(i, j));
 			if (mMarkerData.containsKey(date)) {
 				flagMarkerDay = true;
-				mPaint.setColor(Color.BLUE);
+				mPaint.setColor(mMarkerBackgroundColor);
 				// draw circle
 				canvas.drawCircle(
 						regions[i][j].getBounds().centerX(),
@@ -242,6 +242,7 @@ public class CalListViewMonthView extends View {
 		mHighLightColor = ta.getColor(R.styleable.CalListView_clv_highLightColor, mHighLightColor);
 		mUncheckableColor = ta.getColor(R.styleable.CalListView_clv_uncheckableColor, mUncheckableColor);
 		mBackgroundColor = ta.getColor(R.styleable.CalListView_clv_backgroundColor, mBackgroundColor);
+		mMarkerBackgroundColor = ta.getColor(R.styleable.CalListView_clv_markerBgColor, mMarkerBackgroundColor);
 		ta.recycle();
 
 
@@ -261,13 +262,10 @@ public class CalListViewMonthView extends View {
 		mPaintDivider.setColor(getResources().getColor(R.color.calendar_normal_lunar_text_color));
 		mPaintDivider.setStrokeWidth(0.5f);
 
-
-
 		// 判断当前页面中的月份是当前时间的月份，用于初始化选中项
 		if (mMonth.isMonthOfToday()) {
-			mSelectedIndex = mMonth.getIndexOfToday();
+			mSelectedIndex = 0;//mMonth.getIndexOfToday();	// 初始化选中去除
 		}
-		// System.out.println("MonthView method init() getIndexOfToday mSelectedIndex:" + mSelectedIndex);
 		setBackgroundColor(this.mBackgroundColor);
 	}
 
@@ -306,7 +304,7 @@ public class CalListViewMonthView extends View {
 //		drawLeftRightLine(canvas, rect, xIndex, yIndex);		// 分割线
 		drawBackground(canvas, rect, monthDay, xIndex, yIndex);	// 选中的背景样式
 		drawSolarText(canvas, rect, monthDay);
-//		drawLunarText(canvas, rect, monthDay);	// 农历删除~
+		drawLunarText(canvas, rect, monthDay);	// 农历~
 //		 drawRectangle(canvas, rect); 			// 绘制方块边框
 	}
 
@@ -351,23 +349,23 @@ public class CalListViewMonthView extends View {
 		}
 		mPaint.setTextSize(mLunarTextSize);
 		/* getLunarDay 返回当前日期的农历字符串 */
-//		canvas.drawText(monthDay.getLunarDay(), rect.centerX(), rect.centerY() + mLunarOffset, mPaint);
-		canvas.drawText(monthDay.getLunarDay(), rect.centerX() + mLunarOffset, rect.centerY(), mPaint);//rect.centerY() +mLunarOffset
+		canvas.drawText(monthDay.getLunarDay(), rect.centerX(), rect.centerY() + mLunarOffset, mPaint);
+//		canvas.drawText(monthDay.getLunarDay(), rect.centerX() + mLunarOffset, rect.centerY(), mPaint);//rect.centerY() +mLunarOffset
 	}
 
 	/* draw circle for selected day 绘制选中的圆形 */
 	private void drawBackground(Canvas canvas, Rect rect, MonthDay day, int xIndex, int yIndex) {
 		// 强制绘制当日背景，并不可变
-		if (day.isToday()) {
-			Drawable background = mTodayBackground;
-			if (background == null) {
-				drawRing(canvas, rect);
-			} else {
-				background.setBounds(rect);
-				background.draw(canvas);
-			}
-			return;
-		}
+//		if (day.isToday()) {
+//			Drawable background = mTodayBackground;
+//			if (background == null) {
+//				drawRing(canvas, rect);
+//			} else {
+//				background.setBounds(rect);
+//				background.draw(canvas);
+//			}
+//			return;
+//		}
 		/* not today was selected 绘制不是今天，但是是每个月的第一天*/
 		flag1 = (mSelectedIndex == -1 && day.isFirstDay());
 		if (flag1) {
@@ -383,14 +381,12 @@ public class CalListViewMonthView extends View {
 //		画选中圆形
 //		mPaint.setColor(LIGHT_GRAY);
 //		canvas.drawCircle(rect.centerX(), rect.centerY(), mCircleRadius, mPaint);
-		drawSelectedBgStyle(canvas, rect);
+//		drawSelectedBgStyle(canvas, rect);
 	}
 	/* draw ring as background of today 绘制日历中今天的红色环形*/
 	private void drawRing(Canvas canvas, Rect rect) {
 		mPaint.setColor(Color.BLACK);
 		canvas.drawCircle(rect.centerX(), rect.centerY(), mCircleRadius, mPaint);
-//		mPaint.setColor(mLunarView.getMonthBackgroundColor());
-//		canvas.drawCircle(rect.centerX(), rect.centerY(), mCircleRadius - 2, mPaint);
 //		drawSelectedBgStyle(canvas, rect);
 	}
 
@@ -414,6 +410,7 @@ public class CalListViewMonthView extends View {
 		 canvas.drawRect(rect, mPaintRect);
 	}
 
+	@Deprecated
 	private void drawLeftRightLine(Canvas canvas, Rect rect,int xIndex, int yIndex) {
 		float startX = rect.left;
 		float startY = rect.top + 27f;
@@ -454,25 +451,15 @@ public class CalListViewMonthView extends View {
 					invalidate();		// 执行重绘
 				} else {
 					// deprecated
-					if (monthDay.getDayFlag() == MonthDay.PREV_MONTH_DAY) {	// 如果当前的日期标志等于上一个月
-						mLunarView.showPrevMonth(day);		// 显示上一个月
-					} else if (monthDay.getDayFlag() == MonthDay.NEXT_MONTH_DAY) {
-						mLunarView.showNextMonth(day);
-					}
+//					if (monthDay.getDayFlag() == MonthDay.PREV_MONTH_DAY) {	// 如果当前的日期标志等于上一个月
+//						mLunarView.showPrevMonth(day);		// 显示上一个月
+//					} else if (monthDay.getDayFlag() == MonthDay.NEXT_MONTH_DAY) {
+//						mLunarView.showNextMonth(day);
+//					}
 				}
 				break;
 			}
 		}
-	}
-
-	/**
-	 * 执行点击日历的点击事件
-	 * Perform day click event.
-	 */
-	@Deprecated
-	protected void performDayClick() {
-		MonthDay monthDay = mMonth.getMonthDay(mSelectedIndex);
-		mLunarView.dispatchDateClickListener(monthDay);
 	}
 
 	/**

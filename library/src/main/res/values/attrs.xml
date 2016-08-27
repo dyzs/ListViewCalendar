@@ -25,6 +25,12 @@
         <attr name="clv_highLightColor" format="color"/>
         <attr name="clv_uncheckableColor" format="color" />
         <attr name="clv_backgroundColor" format="color" />
+        <attr name="clv_markerBgColor" format="color" />
+
+
+        <attr name="clv_selectFirstDay" format="boolean" />
+
+
     </declare-styleable>
 
     <!--
