@@ -3,8 +3,8 @@
 /.idea/workspace.xml
 /.idea/libraries
 .DS_Store
-/build
 /captures
 /gif
 .idea
-.iml
+*.iml
+/src/androidTest
