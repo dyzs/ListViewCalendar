@@ -97,6 +97,18 @@ public class CalListViewMonthView extends View {
 		invalidate();
 	}
 
+	/**
+	 * 传递上下文，月份和农历控件
+	 * The constructor of month view.
+	 *
+	 * @param context   context to use
+	 * @param lunarView {@link View}
+	 */
+	public CalListViewMonthView(Context context, CalListViewMonth month, View lunarView) {
+		this(context);
+		mMonth = month;
+	}
+
 	public CalListViewMonthView(Context context) {
 		this(context, null);
 	}
