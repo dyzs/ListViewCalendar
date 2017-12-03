@@ -8,13 +8,12 @@ import android.widget.TextView;
 
 import com.dyzs.library.activity.CalendarActivity;
 
-import java.util.Calendar;
 
 public class MainActivity extends Activity implements View.OnClickListener{
     private static final String TAG = MainActivity.class.getSimpleName();
 
 
-    private TextView goto_list_view_calendar;
+    private TextView goto_list_view_calendar, goto_view_pager_calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +28,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
     private void initView () {
         goto_list_view_calendar = (TextView) findViewById(R.id.goto_list_view_calendar);
+        goto_view_pager_calendar = (TextView) findViewById(R.id.goto_view_pager_calendar);
     }
 
 
@@ -36,6 +36,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
     private void initEvent () {
         goto_list_view_calendar.setOnClickListener(this);
+        goto_view_pager_calendar.setOnClickListener(this);
     }
 
 
@@ -45,9 +46,14 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
             case R.id.goto_list_view_calendar:
-                Intent intent = new Intent(this, CalendarActivity.class);
+                intent = new Intent(this, CalendarActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.goto_view_pager_calendar:
+                intent = new Intent(this, ViewPagerCalendarActivity.class);
                 startActivity(intent);
                 break;
         }
