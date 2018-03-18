@@ -30,6 +30,13 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:text="@string/test_wx_auth"
+
+    <TextView
+        android:layout_below="@+id/goto_list_view_calendar"
+        android:id="@+id/goto_view_pager_calendar"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:text="@string/go_to_view_pager_calendar"
         android:gravity="center"
         android:textSize="20sp"
         android:background="@drawable/selector_btn_blue"
