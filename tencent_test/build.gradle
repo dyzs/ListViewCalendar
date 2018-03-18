@@ -1,11 +1,17 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'LunarCalendar'
+            keyPassword 'zhy19900908'
+            storeFile file('C:/Android/Keystore/listLunarCalendar.jks')
+            storePassword 'zhy19900908'
+        }
+    }
     compileSdkVersion 21
     buildToolsVersion '21.1.2'
-
     defaultConfig {
-        applicationId "com.dyzs.listviewcalendar"
         minSdkVersion 11
         targetSdkVersion 21
         versionCode 1
@@ -16,12 +22,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+        }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.2.1'
-    compile project(':library')
-    compile project(':tencent_test')
 }
