@@ -11,4 +11,5 @@
     <string name="errcode_cancel">分享取消</string>
     <string name="errcode_deny">分享被拒绝</string>
     <string name="errcode_unknown">发送返回</string>
+    <string name="go_to_view_pager_calendar">goto hor list calendar</string>
 </resources>
